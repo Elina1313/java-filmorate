@@ -8,9 +8,7 @@ import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -20,7 +18,7 @@ public class UserService {
     private Map<Integer, User> users = new HashMap<>();
 
     public Collection<User> findAllUsers() {
-        return users.values();
+        return new ArrayList<>(users.values());
     }
 
     public User createUser(User user) {
@@ -43,7 +41,7 @@ public class UserService {
         return user; //
     }
 
-    public static void validation(User user) {
+    private static void validation(User user) {
         if (user.getEmail().isBlank() || !user.getEmail().contains("@")) { //
             throw new ValidationException("Электронная почта не может быть пустой и должна содержать символ @");
         }

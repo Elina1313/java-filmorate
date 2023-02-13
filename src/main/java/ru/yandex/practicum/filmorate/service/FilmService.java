@@ -7,6 +7,7 @@ import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -17,7 +18,7 @@ public class FilmService {
     private Map<Integer, Film> films = new HashMap<>();
 
     public Collection<Film> getAllFilms() {
-        return films.values();
+        return new ArrayList<>(films.values());
     }
 
     public Film addFilm(Film film) {
@@ -40,7 +41,7 @@ public class FilmService {
         return film;
     }
 
-    public void validation(Film film) {
+    private void validation(Film film) {
         if (film.getName().isEmpty()) { //
             throw new ValidationException("Название не может быть пустым");
         }
