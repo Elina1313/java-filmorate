@@ -22,7 +22,7 @@ public class FilmControllerTest {
     private FilmStorage filmStorage;
     private Film film;
 
-    /*@BeforeEach
+    @BeforeEach
     void beforeEach() {
         filmService = new FilmService(filmStorage, userService);
         filmController = new FilmController(filmService);
@@ -65,6 +65,6 @@ public class FilmControllerTest {
     public void wrongDurationOfFilm() {
         film.setDuration((long) -1.55);
         Assertions.assertThrows(ValidationException.class, () -> filmController.addFilm(film));
-    }*/
+    }
 
 }
