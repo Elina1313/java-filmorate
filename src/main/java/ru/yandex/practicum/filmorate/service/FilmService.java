@@ -1,48 +1,83 @@
 package ru.yandex.practicum.filmorate.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
-import ru.yandex.practicum.filmorate.exception.UserAlreadyExistException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.storage.FilmStorage;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
 @Service
 public class FilmService {
     private int generateId = 0;
-    private Map<Integer, Film> films = new HashMap<>();
+    private final FilmStorage filmStorage;
+
+    private final UserService userService;
+
+    @Autowired
+    public FilmService(FilmStorage filmStorage, @Autowired(required = false) UserService userService) {
+        this.filmStorage = filmStorage;
+        this.userService = userService;
+    }
 
     public Collection<Film> getAllFilms() {
-        return new ArrayList<>(films.values());
+        return filmStorage.getAllFilms();
     }
 
     public Film addFilm(Film film) {
         validation(film);
-        if (films.containsKey(film.getId())) {
-            throw new UserAlreadyExistException(String.format(
-                    "Фильм с id:%d уже зарегистрирован.", film.getId()));
-        }
-        films.put(film.getId(), film);
-        return film;
+        return filmStorage.addFilm(film);
     }
 
     public Film updateFilm(Film film) {
         validation(film);
-        if (!films.containsKey(film.getId())) { //
-            throw new NotFoundException("Фильм с идентификатором " +
-                    film.getId() + " не зарегистрирован!");
+        return filmStorage.updateFilm(film);
+    }
+
+    public void addLike(final int id, int userId) {
+        Film film = getStoredFilm(id);
+        User user = userService.getUser(userId);
+        filmStorage.addLike(film.getId(), user.getId());
+    }
+
+    private Film getStoredFilm(int id) {
+        final int filmId = id;
+        if (filmId == Integer.MIN_VALUE) {
+            throw new NotFoundException("Не удалось распознать идентификатор фильма: " +
+                    "значение " + filmId);
         }
-        films.put(film.getId(), film);
+        Film film = filmStorage.getFilm(id);
+        if (film == null) {
+            throw new NotFoundException("Фильм с идентификатором " +
+                    id + " не зарегистрирован!");
+        }
         return film;
     }
 
+    public void deleteLike(final int id, final int userId) {
+        Film film = getStoredFilm(id);
+        User user = userService.getUser(userId);
+        filmStorage.deleteLike(film.getId(), user.getId());
+    }
+
+    public Collection<Film> getMostPopularFilms(final Integer count) {
+        Integer size = count;
+        if (size == Integer.MIN_VALUE) {
+            size = 10;
+        }
+        return filmStorage.getMostPopularFilms(size);
+    }
+
+    public Film getFilm(int id) {
+        return getStoredFilm(id);
+    }
+
     private void validation(Film film) {
-        if (film.getName().isEmpty()) { //
+        if (film.getName().isEmpty()) {
             throw new ValidationException("Название не может быть пустым");
         }
         if (film.getDescription().length() > 200) {

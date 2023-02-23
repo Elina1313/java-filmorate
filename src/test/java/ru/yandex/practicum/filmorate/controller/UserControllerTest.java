@@ -8,6 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.UserService;
+import ru.yandex.practicum.filmorate.storage.UserStorage;
 
 import java.time.LocalDate;
 
@@ -15,13 +16,18 @@ import java.time.LocalDate;
 public class UserControllerTest {
     private UserController userController;
     private UserService userService;
+    private UserStorage userStorage;
     private User user;
+
+    public UserControllerTest(UserStorage userStorage) {
+        this.userStorage = userStorage;
+    }
 
     @BeforeEach
     void beforeEach() {
-        userService = new UserService();
-        userController = new UserController(userService);
-        user = User.builder()
+        this.userService = new UserService(this.userStorage);
+        this.userController = new UserController(this.userService);
+        this.user = User.builder()
                 .id(1)
                 .email("mail@yandex.ru")
                 .login("Login")
@@ -32,38 +38,38 @@ public class UserControllerTest {
 
     @AfterEach
     void afterEach() {
-        userController = null;
-        user = null;
-        userService = null;
+        this.userController = null;
+        this.user = null;
+        this.userService = null;
     }
 
     @Test
     public void wrongEmailOfUser() {
         user.setEmail("");
-        Assertions.assertThrows(ValidationException.class, () -> userController.createUser(user));
-        user.setEmail("yandex.ru");
-        Assertions.assertThrows(ValidationException.class, () -> userController.createUser(user));
+        Assertions.assertThrows(ValidationException.class, () -> this.userController.createUser(this.user));
+        this.user.setEmail("yandex.ru");
+        Assertions.assertThrows(ValidationException.class, () -> this.userController.createUser(this.user));
     }
 
     @Test
     public void wrongLoginOfUser() {
-        user.setLogin("");
-        Assertions.assertThrows(ValidationException.class, () -> userController.createUser(user));
+        this.user.setLogin("");
+        Assertions.assertThrows(ValidationException.class, () -> this.userController.createUser(this.user));
         user.setLogin(" log in");
-        Assertions.assertThrows(ValidationException.class, () -> userController.createUser(user));
+        Assertions.assertThrows(ValidationException.class, () -> this.userController.createUser(this.user));
     }
 
     @Test
     public void wrongDateOfUserBirthday() {
-        user.setBirthday(LocalDate.of(2025, 12, 1));
-        Assertions.assertThrows(ValidationException.class, () -> userController.createUser(user));
+        this.user.setBirthday(LocalDate.of(2025, 12, 1));
+        Assertions.assertThrows(ValidationException.class, () -> this.userController.createUser(this.user));
     }
 
     @Test
     public void wrongUserName() {
-        user.setName("");
-        userController.createUser(user);
-        Assertions.assertEquals(user.getLogin(), user.getName());
+        this.user.setName("");
+        this.userController.createUser(this.user);
+        Assertions.assertEquals(this.user.getLogin(), this.user.getName());
     }
 
 }
