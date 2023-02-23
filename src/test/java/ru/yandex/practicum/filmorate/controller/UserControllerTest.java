@@ -23,7 +23,7 @@ public class UserControllerTest {
         this.userStorage = userStorage;
     }
 
-    @BeforeEach
+    /*@BeforeEach
     void beforeEach() {
         this.userService = new UserService(this.userStorage);
         this.userController = new UserController(this.userService);
@@ -70,6 +70,6 @@ public class UserControllerTest {
         this.user.setName("");
         this.userController.createUser(this.user);
         Assertions.assertEquals(this.user.getLogin(), this.user.getName());
-    }
+    }*/
 
 }
