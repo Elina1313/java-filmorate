@@ -62,7 +62,6 @@ public class UserController {
     @PutMapping("/{id}/friends/{friendId}")
     public void addFriend(@PathVariable int id, @PathVariable int friendId) {
         log.info("Получен запрос PUT к эндпоинту: /users/{}/friends/{}", id, friendId);
-        //userService.updateUser(user).getId();
         userService.addFriend(id, friendId);
         log.info("Обновлен объект {} с идентификатором {}. Добавлен друг {}",
                 User.class.getSimpleName(), id, friendId);

@@ -45,11 +45,6 @@ public class FilmService {
     }
 
     private Film getStoredFilm(int id) {
-        final int filmId = id;
-        if (filmId == Integer.MIN_VALUE) {
-            throw new NotFoundException("Не удалось распознать идентификатор фильма: " +
-                    "значение " + filmId);
-        }
         Film film = filmStorage.getFilm(id);
         if (film == null) {
             throw new NotFoundException("Фильм с идентификатором " +
@@ -64,9 +59,8 @@ public class FilmService {
         filmStorage.deleteLike(film.getId(), user.getId());
     }
 
-    public Collection<Film> getMostPopularFilms(final Integer count) {
-        Integer size = count;
-        if (size == Integer.MIN_VALUE) {
+    public Collection<Film> getMostPopularFilms(Integer size) {
+        if (size == 0) {
             size = 10;
         }
         return filmStorage.getMostPopularFilms(size);

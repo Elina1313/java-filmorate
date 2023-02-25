@@ -52,25 +52,20 @@ public class InMemoryFilmStorage implements FilmStorage {
     }
 
     @Override
-    public boolean deleteFilm(Film film) {
+    public void deleteFilm(Film film) {
         films.remove(film.getId());
-        return true;
     }
 
     @Override
-    public boolean addLike(int filmId, int userId) {
+    public void addLike(int filmId, int userId) {
         Film film = films.get(filmId);
         film.addLike(userId);
-        updateFilm(film);
-        return true;
     }
 
     @Override
-    public boolean deleteLike(int filmId, int userId) {
+    public void deleteLike(int filmId, int userId) {
         Film film = films.get(filmId);
         film.deleteLike(userId);
-        updateFilm(film);
-        return true;
     }
 
     @Override

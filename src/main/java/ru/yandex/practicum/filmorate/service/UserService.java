@@ -39,7 +39,7 @@ public class UserService {
     }
 
     public void addFriend(final int supposedUserId, final int supposedFriendId) {
-        if ((supposedUserId <= 0) || (supposedFriendId <= 0)) {
+        if (supposedUserId <= 0 || supposedFriendId <= 0) {
             throw new NotFoundException("id is less than zero");
         }
         userStorage.addFriend(supposedUserId, supposedFriendId);
@@ -52,9 +52,7 @@ public class UserService {
     public Collection<User> getFriends(final int supposedUserId) {
         User user = getUser(supposedUserId);
         Collection<User> friends = new HashSet<>();
-        for (Integer id : user.getFriends()) {
-            friends.add(userStorage.getUser(id));
-        }
+        user.getFriends().stream().forEach(id -> friends.add(userStorage.getUser(id)));
         return friends;
     }
 
@@ -65,11 +63,11 @@ public class UserService {
         if (((user.getFriends() == null) || (user.getFriends().isEmpty())) || ((otherUser.getFriends() == null) || (otherUser.getFriends().isEmpty()))) {
             return Collections.emptyList();
         }
-        for (Integer id : user.getFriends()) {
+        user.getFriends().stream().forEach(id -> {
             if (otherUser.getFriends().contains(id)) {
                 commonFriends.add(userStorage.getUser(id));
             }
-        }
+        });
         return commonFriends;
     }
 
@@ -102,10 +100,6 @@ public class UserService {
     }
 
     private User getStoredUser(final int supposedId) {
-        if (supposedId == Integer.MIN_VALUE) {
-            throw new NotFoundException("Не удалось распознать идентификатор пользователя: " +
-                    "значение " + supposedId);
-        }
         User user = userStorage.getUser(supposedId);
         if (user == null) {
             throw new NotFoundException("Пользователь с идентификатором " +

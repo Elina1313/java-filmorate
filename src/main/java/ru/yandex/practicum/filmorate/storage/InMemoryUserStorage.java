@@ -53,34 +53,23 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     @Override
-    public boolean deleteUser(User user) {
+    public void deleteUser(User user) {
         users.remove(user.getId());
-        return true;
     }
 
     @Override
-    public boolean addFriend(int userId, int friendId) {
+    public void addFriend(int userId, int friendId) {
         User user = users.get(userId);
         User friend = users.get(friendId);
         user.addFriend(friendId);
         friend.addFriend(userId);
         updateUser(user);
         updateUser(friend);
-        return true;
     }
 
     @Override
-    public boolean deleteFriend(int userId, int friendId) {
-        for (User user : findAllUsers()) {
-            if (user.getId() == userId) {
-                user.getFriends().remove(friendId);
-                log.info("У пользователя \"{}\" удален друг \"{}\"", userId, friendId);
-            }
-            if (user.getId() == friendId) {
-                user.getFriends().remove(userId);
-                log.info("У пользователя c id = \"{}\" удален друг c id = \"{}\"", friendId, userId);
-            }
-        }
-        return false;
+    public void deleteFriend(int userId, int friendId) {
+        User user = users.get(userId);
+        user.getFriends().remove(friendId);
     }
 }
