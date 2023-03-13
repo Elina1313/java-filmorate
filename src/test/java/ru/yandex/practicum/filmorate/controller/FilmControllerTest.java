@@ -8,6 +8,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.FilmService;
+import ru.yandex.practicum.filmorate.service.UserService;
+import ru.yandex.practicum.filmorate.storage.FilmStorage;
 
 import java.time.LocalDate;
 
@@ -15,11 +17,14 @@ import java.time.LocalDate;
 public class FilmControllerTest {
     private FilmController filmController;
     private FilmService filmService;
+
+    private UserService userService;
+    private FilmStorage filmStorage;
     private Film film;
 
     @BeforeEach
     void beforeEach() {
-        filmService = new FilmService();
+        filmService = new FilmService(filmStorage, userService);
         filmController = new FilmController(filmService);
         film = Film.builder()
                 .id(1)
