@@ -22,4 +22,6 @@ public class ExceptionHandlers {
     public Map<String, String> handleValidationException(final ValidationException e) {
         return Map.of("id is less than zero", e.getMessage());
     }
+
+
 }

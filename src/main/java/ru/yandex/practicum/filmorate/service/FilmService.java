@@ -1,30 +1,43 @@
 package ru.yandex.practicum.filmorate.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
+import ru.yandex.practicum.filmorate.storage.UserStorage;
 
+import javax.validation.Validator;
 import java.time.LocalDate;
-import java.util.Collection;
+import java.util.*;
 
 @Service
 public class FilmService {
     private int generateId = 0;
-    private final FilmStorage filmStorage;
 
-    private final UserService userService;
+
+    private final FilmStorage filmStorage;
+    private final UserStorage userStorage;
 
     @Autowired
-    public FilmService(FilmStorage filmStorage, @Autowired(required = false) UserService userService) {
+    public FilmService(FilmStorage filmStorage,
+                      UserStorage userStorage) {
         this.filmStorage = filmStorage;
-        this.userService = userService;
+        this.userStorage = userStorage;
     }
 
+/*    @Autowired
+    public FilmService(@Qualifier("DBFilmStorage")FilmStorage filmStorage, UserService userService) {
+        //this.validator = validator;
+        this.filmStorage = filmStorage;
+        this.userService = userService;
+    }*/
+
     public Collection<Film> getAllFilms() {
+
         return filmStorage.getAllFilms();
     }
 
@@ -38,10 +51,10 @@ public class FilmService {
         return filmStorage.updateFilm(film);
     }
 
-    public void addLike(final int id, int userId) {
+    public boolean addLike(final int id, int userId) {
         Film film = getStoredFilm(id);
-        User user = userService.getUser(userId);
-        filmStorage.addLike(film.getId(), user.getId());
+        User user = userStorage.getUser(userId);
+        return filmStorage.addLike(film.getId(), user.getId());
     }
 
     private Film getStoredFilm(int id) {
@@ -55,7 +68,7 @@ public class FilmService {
 
     public void deleteLike(final int id, final int userId) {
         Film film = getStoredFilm(id);
-        User user = userService.getUser(userId);
+        User user = userStorage.getUser(userId);
         filmStorage.deleteLike(film.getId(), user.getId());
     }
 

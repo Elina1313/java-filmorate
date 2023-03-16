@@ -13,9 +13,9 @@ import java.util.Collection;
 @RestController
 @RequestMapping("/users")
 public class UserController {
-    private UserService userService;
+    private final UserService userService;
 
-    public UserController(@Autowired(required = false) UserService userService) {
+    public UserController(@Autowired UserService userService) {
         this.userService = userService;
     }
 
