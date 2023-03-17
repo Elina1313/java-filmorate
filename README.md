@@ -1,7 +1,10 @@
 # java-filmorate
 Template repository for Filmorate project.
 ![sqlDB](https://user-images.githubusercontent.com/112032648/225884961-437c23dd-d080-4357-a33e-cb780d87f62d.png)
-```Table film {
+
+
+```
+Table film {
   film_id int [pk]
   name varchar
   description varchar
@@ -47,4 +50,5 @@ Table rating_mpa {
   rating_id int 
   name varchar 
   description varchar
-}```
+}
+```
