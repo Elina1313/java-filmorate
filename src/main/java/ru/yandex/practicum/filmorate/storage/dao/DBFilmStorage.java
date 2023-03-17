@@ -39,8 +39,8 @@ public abstract class DBFilmStorage implements FilmStorage {
     public Film getFilm(int filmId) {
 
         String sqlFilm = "select * from FILM " +
-                "INNER JOIN RATINGMPA R on FILM.RATINGID = R.RATINGID " +
-                "where FILMID = ?";
+                "INNER JOIN RatingMPA R on FILM.RatingID = R.RatingID " +
+                "where FilmID = ?";
         Film film;
         try {
             film = jdbcTemplate.queryForObject(sqlFilm, (rs, rowNum) -> makeFilm(rs), filmId);
@@ -49,7 +49,6 @@ public abstract class DBFilmStorage implements FilmStorage {
             throw new NotFoundException("Фильм с идентификатором " +
                     filmId + " не зарегистрирован!");
         }
-        assert film != null;
         log.info("Найден фильм: {} {}", film.getId(), film.getName());
         return film;
     }
@@ -57,7 +56,7 @@ public abstract class DBFilmStorage implements FilmStorage {
     @Override
     public Collection<Film> getAllFilms() {
         String sql = "select * from FILM " +
-                "INNER JOIN RATINGMPA R on FILM.RATINGID = R.RATINGID ";
+                "INNER JOIN RatingMPA R on Film.RatingID = R.RatingID ";
         return jdbcTemplate.query(sql, (resultSet, rowNum) -> makeFilm(resultSet));
     }
 

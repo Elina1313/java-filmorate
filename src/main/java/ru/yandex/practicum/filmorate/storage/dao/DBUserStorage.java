@@ -13,6 +13,7 @@ import ru.yandex.practicum.filmorate.storage.UserStorage;
 
 import java.sql.*;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -27,7 +28,7 @@ public class DBUserStorage implements UserStorage {
 
     @Override
     public User getUser(Integer id) {
-        String sqlUser = "select * from USERS where USERID = ?";
+        String sqlUser = "select * from Users where UserID = ?";
         User user;
         try {
             user = jdbcTemplate.queryForObject(sqlUser, (rs, rowNum) -> makeUser(rs), id);
@@ -41,13 +42,13 @@ public class DBUserStorage implements UserStorage {
 
     @Override
     public Collection<User> findAllUsers() {
-        String sqlAllUsers = "select * from USERS";
+        String sqlAllUsers = "select * from Users";
         return jdbcTemplate.query(sqlAllUsers, (rs, rowNum) -> makeUser(rs));
     }
 
     @Override
     public User createUser(User user) {
-        String sqlQuery = "insert into USERS " +
+        String sqlQuery = "insert into Users " +
                 "(EMAIL, LOGIN, NAME, BIRTHDAY) " +
                 "values (?, ?, ?, ?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -73,9 +74,9 @@ public class DBUserStorage implements UserStorage {
 
     @Override
     public User updateUser(User user) {
-        String sqlUser = "update USERS set " +
+        String sqlUser = "update Users set " +
                 "EMAIL = ?, LOGIN = ?, NAME = ?, BIRTHDAY = ? " +
-                "where USERID = ?";
+                "where UserID = ?";
         jdbcTemplate.update(sqlUser,
                 user.getEmail(), user.getLogin(), user.getName(), user.getBirthday(), user.getId());
 
@@ -84,7 +85,7 @@ public class DBUserStorage implements UserStorage {
 
     @Override
     public void deleteUser(User user) {
-        String sqlQuery = "delete from USERS where USERID = ?";
+        String sqlQuery = "delete from Users where UserID = ?";
         //return jdbcTemplate.update(sqlQuery, user.getId()) > 0;
     }
 
@@ -100,23 +101,23 @@ public class DBUserStorage implements UserStorage {
     }
 
     private Set<Integer> getUserFriends(int userId) {
-        String sqlGetFriends = "select FRIENDID from FRIENDSHIP where USERID = ?";
-        return (Set<Integer>) jdbcTemplate.queryForList(sqlGetFriends, Integer.class, userId);
+        String sqlGetFriends = "select FriendID from Friends where UserID = ?";
+        return new HashSet<>(jdbcTemplate.queryForList (sqlGetFriends, Integer.class, userId));
     }
 
     @Override
     public boolean addFriend(int userId, int friendId) {
         boolean friendAccepted;
-        String sqlGetReversFriend = "select * from FRIENDSHIP " +
-                "where USERID = ? and FRIENDID = ?";
+        String sqlGetReversFriend = "select * from Friends " +
+                "where UserID = ? and FriendID = ?";
         SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet(sqlGetReversFriend, friendId, userId);
         friendAccepted = sqlRowSet.next();
-        String sqlSetFriend = "insert into FRIENDSHIP (USERID, FRIENDID, STATUS) " +
+        String sqlSetFriend = "insert into Friends (UserID, FriendID, Confirmed) " +
                 "VALUES (?,?,?)";
         jdbcTemplate.update(sqlSetFriend, userId, friendId, friendAccepted);
         if (friendAccepted) {
-            String sqlSetStatus = "update FRIENDSHIP set STATUS = true " +
-                    "where USERID = ? and FRIENDID = ?";
+            String sqlSetStatus = "update Friends set Confirmed = true " +
+                    "where UserID = ? and FriendID = ?";
             jdbcTemplate.update(sqlSetStatus, friendId, userId);
         }
         return true;
@@ -124,10 +125,10 @@ public class DBUserStorage implements UserStorage {
 
     @Override
     public void deleteFriend(int userId, int friendId) {
-        String sqlDeleteFriend = "delete from FRIENDSHIP where USERID = ? and FRIENDID = ?";
+        String sqlDeleteFriend = "delete from Friends where UserID = ? and FriendID = ?";
         jdbcTemplate.update(sqlDeleteFriend, userId, friendId);
-        String sqlSetStatus = "update FRIENDSHIP set STATUS = false " +
-                "where USERID = ? and FRIENDID = ?";
+        String sqlSetStatus = "update Friends set Confirmed = false " +
+                "where UserID = ? and FriendID = ?";
         jdbcTemplate.update(sqlSetStatus, friendId, userId);
         //return true;
     }

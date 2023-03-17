@@ -38,7 +38,7 @@ public class UserService {
         return userStorage.updateUser(user);
     }
 
-    public void addFriend(final int supposedUserId, final int supposedFriendId) {
+    public void addFriend(int supposedUserId, int supposedFriendId) {
         if (supposedUserId <= 0 || supposedFriendId <= 0) {
             throw new NotFoundException("id is less than zero");
         }

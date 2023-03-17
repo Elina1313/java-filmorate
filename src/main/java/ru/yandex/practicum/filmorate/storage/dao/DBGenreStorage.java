@@ -21,7 +21,7 @@ public class DBGenreStorage implements GenreStorage {
 
     @Override
     public boolean deleteFilmGenres(int filmId) {
-        String deleteOldGenres = "delete from GENRELINE where FILMID = ?";
+        String deleteOldGenres = "delete from GenresGroup where FILMID = ?";
         jdbcTemplate.update(deleteOldGenres, filmId);
         return true;
     }
@@ -29,7 +29,7 @@ public class DBGenreStorage implements GenreStorage {
     @Override
     public boolean addFilmGenres(int filmId, Collection<Genre> genres) {
         for (Genre genre : genres) {
-            String setNewGenres = "insert into GENRELINE (FILMID, GENREID) values (?, ?) ON CONFLICT DO NOTHING";
+            String setNewGenres = "insert into GenresGroup (FILMID, GENREID) values (?, ?) ON CONFLICT DO NOTHING";
             jdbcTemplate.update(setNewGenres, filmId, genre.getId());
         }
         return true;
@@ -37,21 +37,21 @@ public class DBGenreStorage implements GenreStorage {
 
     @Override
     public Collection<Genre> getGenresByFilmId(int filmId) {
-        String sqlGenre = "select GENRE.GENREID, NAME from GENRE " +
-                "INNER JOIN GENRELINE GL on GENRE.GENREID = GL.GENREID " +
+        String sqlGenre = "select GENRES.GENREID, NAME from GENRES " +
+                "INNER JOIN GenresGroup GL on GENRES.GENREID = GL.GENREID " +
                 "where FILMID = ?";
         return jdbcTemplate.query(sqlGenre, this::makeGenre, filmId);
     }
 
     @Override
     public Collection<Genre> getAllGenres() {
-        String sqlGenre = "select GENREID, NAME from GENRE ORDER BY GENREID";
+        String sqlGenre = "select GENREID, NAME from GENRES ORDER BY GENREID";
         return jdbcTemplate.query(sqlGenre, this::makeGenre);
     }
 
     @Override
     public Genre getGenreById(int genreId) {
-        String sqlGenre = "select * from GENRE where GENREID = ?";
+        String sqlGenre = "select * from GENRES where GENREID = ?";
         Genre genre;
         try {
             genre = jdbcTemplate.queryForObject(sqlGenre, this::makeGenre, genreId);

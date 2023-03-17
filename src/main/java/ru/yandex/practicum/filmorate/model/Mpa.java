@@ -13,7 +13,7 @@ public class Mpa {
 
     private int id;
 
-    private String category;
+    private String name;
 
     private String description;
 
