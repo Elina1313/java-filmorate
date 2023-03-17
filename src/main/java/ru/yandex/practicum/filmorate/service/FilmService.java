@@ -24,17 +24,10 @@ public class FilmService {
 
     @Autowired
     public FilmService(FilmStorage filmStorage,
-                      UserStorage userStorage) {
+                       UserStorage userStorage) {
         this.filmStorage = filmStorage;
         this.userStorage = userStorage;
     }
-
-/*    @Autowired
-    public FilmService(@Qualifier("DBFilmStorage")FilmStorage filmStorage, UserService userService) {
-        //this.validator = validator;
-        this.filmStorage = filmStorage;
-        this.userService = userService;
-    }*/
 
     public Collection<Film> getAllFilms() {
 

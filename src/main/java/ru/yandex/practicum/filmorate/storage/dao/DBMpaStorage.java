@@ -19,9 +19,10 @@ public class DBMpaStorage implements MpaStorage {
     public DBMpaStorage(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
+
     @Override
     public Collection<Mpa> getAllMpa() {
-        String sqlMpa = "select * from RATINGMPA";
+        String sqlMpa = "SELECT * FROM RATINGMPA";
         return jdbcTemplate.query(sqlMpa, this::makeMpa);
     }
 
@@ -30,14 +31,14 @@ public class DBMpaStorage implements MpaStorage {
                 resultSet.getString("Name"),
                 resultSet.getString("Description"));
     }
+
     @Override
     public Mpa getMpaById(int mpaId) {
-        String sqlMpa = "select * from RATINGMPA where RATINGID = ?";
+        String sqlMpa = "SELECT * FROM RATINGMPA WHERE RATINGID = ?";
         Mpa mpa;
         try {
             mpa = jdbcTemplate.queryForObject(sqlMpa, this::makeMpa, mpaId);
-        }
-        catch (EmptyResultDataAccessException e) {
+        } catch (EmptyResultDataAccessException e) {
             throw new NotFoundException("Возрастной рейтинг с идентификатором " +
                     mpaId + " не зарегистрирован!");
         }
