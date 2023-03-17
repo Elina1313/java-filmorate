@@ -10,6 +10,9 @@ import ru.yandex.practicum.filmorate.storage.GenreStorage;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collection;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 
 @Component
 public class DBGenreStorage implements GenreStorage {
@@ -20,23 +23,22 @@ public class DBGenreStorage implements GenreStorage {
     }
 
     @Override
-    public boolean deleteFilmGenres(int filmId) {
+    public void deleteFilmGenres(int filmId) {
         String deleteOldGenres = "delete from GenresGroup where FILMID = ?";
         jdbcTemplate.update(deleteOldGenres, filmId);
-        return true;
     }
 
     @Override
-    public boolean addFilmGenres(int filmId, Collection<Genre> genres) {
-        for (Genre genre : genres) {
-            String setNewGenres = "insert into GenresGroup (FILMID, GENREID) values (?, ?) ON CONFLICT DO NOTHING";
+    public void addFilmGenres(int filmId, List<Genre> genres) {
+        Set<Genre> setGenre = new LinkedHashSet<>(genres);
+        for (Genre genre : setGenre) {
+            String setNewGenres = "insert into GenresGroup (FILMID, GENREID) values (?, ?)";
             jdbcTemplate.update(setNewGenres, filmId, genre.getId());
         }
-        return true;
     }
 
     @Override
-    public Collection<Genre> getGenresByFilmId(int filmId) {
+    public List<Genre> getGenresByFilmId(int filmId) {
         String sqlGenre = "select GENRES.GENREID, NAME from GENRES " +
                 "INNER JOIN GenresGroup GL on GENRES.GENREID = GL.GENREID " +
                 "where FILMID = ?";
@@ -44,7 +46,7 @@ public class DBGenreStorage implements GenreStorage {
     }
 
     @Override
-    public Collection<Genre> getAllGenres() {
+    public List<Genre> getAllGenres() {
         String sqlGenre = "select GENREID, NAME from GENRES ORDER BY GENREID";
         return jdbcTemplate.query(sqlGenre, this::makeGenre);
     }

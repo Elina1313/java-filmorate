@@ -6,6 +6,7 @@ import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.storage.GenreStorage;
 
 import java.util.Collection;
+import java.util.List;
 
 @Service
 public class GenreService {
@@ -16,23 +17,23 @@ public class GenreService {
         this.genreStorage = genreStorage;
     }
 
-    public Collection<Genre> getAllGenres() {
-        return genreStorage.getAllGenres();
+    public List<Genre> getAllGenres() {
+        return (List<Genre>) genreStorage.getAllGenres();
     }
 
-    public Collection<Genre> getFilmGenres(int filmId) {
-        return genreStorage.getGenresByFilmId(filmId);
+    public List<Genre> getFilmGenres(int filmId) {
+        return (List<Genre>) genreStorage.getGenresByFilmId(filmId);
     }
 
     public Genre getGenre(int genreId) {
         return genreStorage.getGenreById(genreId);
     }
 
-    public boolean deleteFilmGenres(int filmId) {
-        return genreStorage.deleteFilmGenres(filmId);
+    public void deleteFilmGenres(int filmId) {
+        genreStorage.deleteFilmGenres(filmId);
     }
 
-    public boolean addFilmGenres(int filmId, Collection<Genre> genres) {
-        return genreStorage.addFilmGenres(filmId, genres);
+    public void addFilmGenres(int filmId, List<Genre> genres) {
+        genreStorage.addFilmGenres(filmId, genres);
     }
 }

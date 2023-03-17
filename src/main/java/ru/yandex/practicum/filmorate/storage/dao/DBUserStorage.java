@@ -18,7 +18,7 @@ import java.util.Objects;
 import java.util.Set;
 
 @Component
-@Primary
+//@Primary
 public class DBUserStorage implements UserStorage {
     private final JdbcTemplate jdbcTemplate;
 

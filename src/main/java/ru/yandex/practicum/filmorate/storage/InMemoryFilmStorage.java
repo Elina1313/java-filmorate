@@ -12,9 +12,9 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@Component
-@Slf4j
-public class InMemoryFilmStorage implements FilmStorage {
+//@Component
+//@Slf4j
+public class InMemoryFilmStorage { /*implements FilmStorage {
     private final Map<Integer, Film> films = new HashMap<>();
 
     @Override
@@ -75,5 +75,5 @@ public class InMemoryFilmStorage implements FilmStorage {
                 .sorted((f1, f2) -> f2.getLikes().size() - f1.getLikes().size())
                 .limit(size)
                 .collect(Collectors.toCollection(HashSet::new));
-    }
+    }*/
 }

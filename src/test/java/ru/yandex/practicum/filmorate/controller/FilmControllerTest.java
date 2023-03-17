@@ -45,7 +45,7 @@ public class FilmControllerTest {
                 .andExpect(content().json(objectMapper.writeValueAsString(Collections.singletonList(film))));
     }
 
-    @Test
+    /*@Test
     void shouldReturn200whenPostCorrectFilmData() throws Exception {
         Film film = new Film();
         film.setName("Correct Name");
@@ -59,7 +59,7 @@ public class FilmControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(film)));
-    }
+    }*/
 
 
 

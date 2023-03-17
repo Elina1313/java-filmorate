@@ -11,9 +11,9 @@ import java.util.Map;
 
 import lombok.extern.slf4j.Slf4j;
 
-@Component
-@Slf4j
-public class InMemoryUserStorage implements UserStorage {
+//@Component
+//@Slf4j
+public class InMemoryUserStorage { /* implements UserStorage {
 
     private final Map<Integer, User> users = new HashMap<>();
 
@@ -72,5 +72,5 @@ public class InMemoryUserStorage implements UserStorage {
     public void deleteFriend(int userId, int friendId) {
         User user = users.get(userId);
         user.getFriends().remove(friendId);
-    }
+    }*/
 }

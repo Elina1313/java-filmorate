@@ -11,6 +11,7 @@ import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.service.GenreService;
 
 import java.util.Collection;
+import java.util.List;
 
 @RestController
 @Slf4j
@@ -24,7 +25,7 @@ public class GenreController {
     }
 
     @GetMapping
-    public Collection<Genre> findAll() {
+    public List<Genre> findAll() {
         log.info("Получен запрос GET к эндпоинту: /genres");
         return genreService.getAllGenres();
     }

@@ -23,8 +23,8 @@ import java.util.List;
 import java.util.Objects;
 
 @Component
-@Primary
-public abstract class DBFilmStorage implements FilmStorage {
+//@Primary
+public class DBFilmStorage implements FilmStorage {
 
     private final Logger log = LoggerFactory.getLogger(DBFilmStorage.class);
     private final JdbcTemplate jdbcTemplate;
@@ -54,7 +54,7 @@ public abstract class DBFilmStorage implements FilmStorage {
     }
 
     @Override
-    public Collection<Film> getAllFilms() {
+    public List<Film> getAllFilms() {
         String sql = "select * from FILM " +
                 "INNER JOIN RatingMPA R on Film.RatingID = R.RatingID ";
         return jdbcTemplate.query(sql, (resultSet, rowNum) -> makeFilm(resultSet));
@@ -143,7 +143,7 @@ public abstract class DBFilmStorage implements FilmStorage {
     }
 
     @Override
-    public Collection<Film> getMostPopularFilms(int count) {
+    public List<Film> getMostPopularFilms(int count) {
         String sqlMostPopular = "select count(L.LIKEID) as likeRate" +
                 ",FILM.FILMID" +
                 ",FILM.NAME ,FILM.DESCRIPTION ,RELEASEDATE ,DURATION ,RATE ,R.RATINGID, R.NAME, R.DESCRIPTION from FILM " +
