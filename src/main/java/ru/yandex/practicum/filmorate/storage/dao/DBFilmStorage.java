@@ -2,8 +2,6 @@ package ru.yandex.practicum.filmorate.storage.dao;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Primary;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -18,7 +16,6 @@ import ru.yandex.practicum.filmorate.service.GenreService;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
 
 import java.sql.*;
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
@@ -113,10 +110,6 @@ public class DBFilmStorage implements FilmStorage {
             }
         }
         return getFilm(film.getId());
-    }
-
-    @Override
-    public void deleteFilm(Film film) {
     }
 
     @Override

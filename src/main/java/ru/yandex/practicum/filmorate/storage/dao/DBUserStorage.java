@@ -80,10 +80,6 @@ public class DBUserStorage implements UserStorage {
         return getUser(user.getId());
     }
 
-    @Override
-    public void deleteUser(User user) {
-    }
-
     private User makeUser(ResultSet resultSet) throws SQLException {
         int userId = resultSet.getInt("UserID");
         return new User(

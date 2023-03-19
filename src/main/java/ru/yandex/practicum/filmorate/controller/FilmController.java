@@ -13,7 +13,7 @@ import java.util.Collection;
 @RestController
 @RequestMapping("/films")
 public class FilmController {
-    private final FilmService filmService; //
+    private final FilmService filmService;
 
     public FilmController(@Autowired FilmService filmService) {
         this.filmService = filmService;
@@ -28,7 +28,7 @@ public class FilmController {
     }
 
     @PutMapping
-    public Film updateFilm(@RequestBody Film film) { //
+    public Film updateFilm(@RequestBody Film film) {
         log.info("Получен запрос на обновление фильма");
         Film updateFilm = filmService.updateFilm(film);
         log.info("Фильм с id: {} обновлен", updateFilm.getId());
