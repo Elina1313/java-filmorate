@@ -29,20 +29,27 @@ public class Film {
     @Length(max = 200)
     private String description;
 
+    @PastOrPresent
     private LocalDate releaseDate;
 
     @Positive
     private long duration;
 
+    private int rate;
+
     @NotNull
+    private Mpa mpa;
+
     private List<Integer> likes = new ArrayList<>();
 
-    public boolean addLike(Integer userId) {
-        return likes.add(userId);
+    private List<Genre> genres = new ArrayList<>();
+
+    public void addLike(Integer userId) {
+        likes.add(userId);
     }
 
-    public boolean deleteLike(Integer userId) {
-        return likes.remove(userId);
+    public void deleteLike(Integer userId) {
+        likes.remove(userId);
     }
 
     @Override

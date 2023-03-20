@@ -15,8 +15,7 @@ import java.util.Collection;
 public class FilmController {
     private final FilmService filmService;
 
-    @Autowired(required = false)
-    public FilmController(FilmService filmService) {
+    public FilmController(@Autowired FilmService filmService) {
         this.filmService = filmService;
     }
 

@@ -2,10 +2,7 @@ package ru.yandex.practicum.filmorate.model;
 
 import lombok.*;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.PastOrPresent;
+import javax.validation.constraints.*;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -22,6 +19,7 @@ public class User {
 
     @NotNull
     @NotBlank
+    @Pattern(regexp = "^\\S*$")
     private String login;
 
     private String name;
@@ -32,11 +30,12 @@ public class User {
     private Set<Integer> friends = new HashSet<>();
 
     public boolean addFriend(Integer id) {
+
         return friends.add(id);
     }
 
-    public boolean deleteFriend(final Integer id) {
-        return friends.remove(id);
+    public void deleteFriend(final Integer id) {
+        friends.remove(id);
     }
 
     @Override
