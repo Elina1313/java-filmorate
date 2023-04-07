@@ -2,6 +2,11 @@
 Template repository for Filmorate project.
 ![sqlDB](https://user-images.githubusercontent.com/112032648/225884961-437c23dd-d080-4357-a33e-cb780d87f62d.png)
 
+Яндекс Практикум: проект "FilmoRate"
+
+Технологии: Java + Spring Boot + Maven + Lombok + JUnit + RESTful API
+
+Описание: проект по рекомендации фильмов, который будет работать с фильмами и оценками пользователей, а также возвращать топ-5 фильмов, рекомендованных к просмотру.
 
 ```
 Table film {
